@@ -9,12 +9,13 @@ import Foundation
 import Combine
 
 class HomeViewModel: ObservableObject {
+    static let shared = HomeViewModel()
+    let defaults = UserDefaults.standard
+    var searchCancellable: AnyCancellable? = nil
+    
     @Published var searchQuery = ""
     @Published var fetchedEvents: [Event]? = nil
     @Published var events: Set<Int>
-    
-    let defaults = UserDefaults.standard
-    var searchCancellable: AnyCancellable? = nil
     
     init() {
         //Favorites data store
@@ -83,7 +84,7 @@ extension HomeViewModel {
     func save() {
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(events) {
-            defaults.set(encoded, forKey: "Favorites")
+            defaults.set(encoded, forKey: "Favorites-2")
         }
     }
 }

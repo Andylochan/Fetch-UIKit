@@ -12,15 +12,15 @@ class ViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
-    private let viewModel = HomeViewModel()
+    let viewModel = HomeViewModel.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
         searchBar.delegate = self
-        
         NotificationCenter.default.addObserver(self, selector: #selector(self.refresh), name: NSNotification.Name(rawValue: "dataFetched"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.refresh), name: NSNotification.Name(rawValue: "dataUpdated"), object: nil)
     }
     
     @objc func refresh() {
@@ -30,14 +30,26 @@ class ViewController: UIViewController {
 
 // MARK:- TableView Datasource
 extension ViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.fetchedEvents?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventCell
-        if let eventImageURL = viewModel.fetchedEvents?[indexPath.row].imageURL {
+        
+        if let fetchedEvent = viewModel.fetchedEvents?[indexPath.row] {
+            let eventImageURL = fetchedEvent.imageURL
             cell.eventImage.sd_setImage(with: URL(string: eventImageURL))
+            cell.eventImage.layer.cornerRadius = 10
+            
+            cell.titleLabel.text = fetchedEvent.title
+            cell.locationLabel.text = fetchedEvent.location
+            
+            let formattedDate = viewModel.formatDate(date: fetchedEvent.dateTime)
+            cell.DateLabel.text = formattedDate
+            
+            cell.favBtn.tintColor = viewModel.contains(fetchedEvent) ? .red : .clear
         }
         return cell
     }
@@ -45,7 +57,7 @@ extension ViewController: UITableViewDataSource {
 
 // MARK:- TableView Delegate
 extension ViewController: UITableViewDelegate {
-    // Select and go to detail view
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let controller = storyboard.instantiateViewController(withIdentifier: "DetailVC") as! DetailViewController
@@ -58,6 +70,7 @@ extension ViewController: UITableViewDelegate {
 
 // MARK:- Searchbar Delegate
 extension ViewController: UISearchBarDelegate {
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text?.count != 0 {
             viewModel.searchQuery = searchText

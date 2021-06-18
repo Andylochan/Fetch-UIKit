@@ -9,11 +9,41 @@ import UIKit
 import SDWebImage
 
 class DetailViewController: UIViewController {
-    var event: Event? = nil
-
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var imgView: UIImageView!
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var locationLabel: UILabel!
+    @IBOutlet weak var favButton: UIButton!
+    
+    var event = Event(id: 0, title: "", dateTime: "", location: "", imageURL: "")
+    let viewModel = HomeViewModel.shared
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupView()
+    }
+    
+    private func setupView() {
+        titleLabel.text = event.title
+        let eventImageURL = event.imageURL
+        imgView.sd_setImage(with: URL(string: eventImageURL))
+        imgView.layer.cornerRadius = 10
+        
+        let formattedDate = viewModel.formatDate(date: event.dateTime)
+        dateLabel.text = formattedDate
 
-        print(event ?? "")
+        locationLabel.text = event.location
+        favButton.tintColor = viewModel.contains(event) ? .red : .black
+        favButton.setBackgroundImage(viewModel.contains(event) ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart"), for: .normal)
+    }
+    
+    @IBAction func favBtnTapped(_ sender: UIButton) {
+        if viewModel.contains(event) {
+            viewModel.remove(event)
+        } else {
+            viewModel.add(event)
+        }
+        setupView()
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "dataUpdated"), object: nil)
     }
 }
