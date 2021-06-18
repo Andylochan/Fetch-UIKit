@@ -48,6 +48,7 @@ class HomeViewModel: ObservableObject {
             if let res = result {
                 self.fetchedEvents = events
                 print(res ? "Fetch Success" : "Fetch Error")
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "dataFetched"), object: nil)
             }
         }
     }

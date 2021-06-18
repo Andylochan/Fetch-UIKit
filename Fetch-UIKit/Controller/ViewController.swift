@@ -12,15 +12,20 @@ class ViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
-    let viewModel = HomeViewModel()
+    private let viewModel = HomeViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         tableView.dataSource = self
         tableView.delegate = self
         searchBar.delegate = self
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.refresh), name: NSNotification.Name(rawValue: "dataFetched"), object: nil)
     }
+    
+    @objc func refresh() {
+       self.tableView.reloadData()
+   }
 }
 
 // MARK:- TableView Datasource
@@ -57,14 +62,9 @@ extension ViewController: UISearchBarDelegate {
         if searchBar.text?.count != 0 {
             viewModel.searchQuery = searchText
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.tableView.reloadData()
-        }
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""
     }
 }
-
-
