@@ -1,9 +1,9 @@
-# Fetch (FetchRewards)
-# REMADE in UIKit
+# Fetch-UIKit (UIKit Version of original app)
 
 Displays events from the SeatGeek API (https://platform.seatgeek.com/)
 
 ## Original SwiftUI App
+### This is a remake of the app linked below. 
 [SwiftUI App Link](https://github.com/Andylochan/Fetch/)
 
 ## How to use
