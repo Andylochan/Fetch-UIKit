@@ -64,7 +64,7 @@ extension ViewController: UITableViewDelegate {
         if let eventToPass = viewModel.fetchedEvents?[indexPath.row] {
             controller.event = eventToPass
         }
-        self.navigationController?.pushViewController(controller, animated: true)
+        navigationController?.pushViewController(controller, animated: true)
     }
 }
 
