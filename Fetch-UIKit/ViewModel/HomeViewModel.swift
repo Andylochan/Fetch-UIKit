@@ -20,7 +20,7 @@ class HomeViewModel: ObservableObject {
     init() {
         //Favorites data store
         let decoder = JSONDecoder()
-        if let data = defaults.data(forKey: "Favorites-2") {
+        if let data = defaults.data(forKey: "Favorites-3") {
             let eventData = try? decoder.decode(Set<Int>.self, from: data)
             self.events = eventData ?? []
         } else {
@@ -45,10 +45,9 @@ class HomeViewModel: ObservableObject {
     func searchEvents() {
         let originalQuery = searchQuery.replacingOccurrences(of: " ", with: "+")
         
-        DataHandler.shared.fetchEvents(with: originalQuery) { [unowned self] (result, events) in
-            if let res = result {
-                self.fetchedEvents = events
-                print(res ? "Fetch Success" : "Fetch Error")
+        DataHandler.shared.fetchEvents(with: originalQuery) { [unowned self] (events) in
+            self.fetchedEvents = events?.events
+            DispatchQueue.main.async {
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "dataFetched"), object: nil)
             }
         }
@@ -84,7 +83,7 @@ extension HomeViewModel {
     func save() {
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(events) {
-            defaults.set(encoded, forKey: "Favorites-2")
+            defaults.set(encoded, forKey: "Favorites-3")
         }
     }
 }

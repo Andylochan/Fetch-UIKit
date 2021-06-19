@@ -15,8 +15,8 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var favButton: UIButton!
     
-    var event = Event(id: 0, title: "", dateTime: "", location: "", imageURL: "")
     let viewModel = HomeViewModel.shared
+    var event = Event(id: 000, title: "", datetimeUTC: "", venue: Venue(location: ""), performers: [])
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,14 +25,14 @@ class DetailViewController: UIViewController {
     
     private func setupView() {
         titleLabel.text = event.title
-        let eventImageURL = event.imageURL
-        imgView.sd_setImage(with: URL(string: eventImageURL))
+        let eventImageURL = event.performers.first?.image
+        imgView.sd_setImage(with: eventImageURL)
         imgView.layer.cornerRadius = 10
         
-        let formattedDate = viewModel.formatDate(date: event.dateTime)
+        let formattedDate = viewModel.formatDate(date: event.datetimeUTC ?? "")
         dateLabel.text = formattedDate
 
-        locationLabel.text = event.location
+        locationLabel.text = event.venue.location
         favButton.tintColor = viewModel.contains(event) ? .red : .black
         favButton.setBackgroundImage(viewModel.contains(event) ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart"), for: .normal)
     }

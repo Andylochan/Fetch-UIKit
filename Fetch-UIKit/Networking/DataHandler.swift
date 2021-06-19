@@ -5,48 +5,30 @@
 //  Created by Andy Lochan on 6/17/21.
 //
 
-import Alamofire
-import SwiftyJSON
+import UIKit
 
 class DataHandler {
     static let shared = DataHandler()
-    
-    func fetchEvents(with queryParameter: String, closure: @escaping (Bool?, [Event]?) -> Void) {
 
-        let url = "https://api.seatgeek.com/2/events?q=\(queryParameter)&client_id=\(clientID)"
-        var events = [Event]()
+    func fetchEvents(with queryParameter: String, closure: @escaping (Events?) -> Void) {
         
-        Alamofire.request(url, method: .get).responseJSON { response in
-            if response.error != nil {
-                closure(nil, nil)
-                return
-            }
-            
-            if let data = response.data, let json = try? JSON(data: data) {
-                //Parse data into a [Event] array
-                let container = json["events"]
-                let eventsArray = container.array ?? []
+        let jsonUrlString = "https://api.seatgeek.com/2/events?q=\(queryParameter)&client_id=\(clientID)"
+        guard let url = URL(string: jsonUrlString) else { return }
+        
+        URLSession.shared.dataTask(with: url) { (data, response, err) in
+            //check err
+            //check response
 
-                for event in eventsArray {
-                    let id = event.dictionaryObject?["id"] as? Int ?? 000
-                    let title = event.dictionaryObject?["title"] as? String ?? ""
-                    let dateTime = event.dictionaryObject?["datetime_utc"] as? String ?? ""
-                    
-                    let venue = event["venue"]
-                    let location = venue.dictionaryObject?["display_location"] as? String ?? ""
-                    
-                    let performerCont = event["performers"]
-                    let performerArr = performerCont.array ?? []
-                    let imageURL = performerArr[0].dictionaryObject?["image"] as? String ?? ""
-
-                    let eventToAppend = Event(id: id, title: title, dateTime: dateTime, location: location, imageURL: imageURL)
-                    events.append(eventToAppend)
-                }
-                closure(true, events)
+            guard let data = data else { return }
+            do {
+                let events = try JSONDecoder().decode(Events.self, from: data)
+                closure(events)
+            } catch let jsonErr {
+                print("Error serializing json:", jsonErr)
             }
-        }
+        }.resume()
     }
-}
+}    
 
 // MARK:-  ClientID
 extension DataHandler {
