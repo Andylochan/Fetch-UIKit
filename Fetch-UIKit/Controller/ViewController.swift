@@ -39,14 +39,14 @@ extension ViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventCell
         
         if let fetchedEvent = viewModel.fetchedEvents?[indexPath.row] {
-            let eventImageURL = fetchedEvent.imageURL
-            cell.eventImage.sd_setImage(with: URL(string: eventImageURL))
+            let eventImageURL = fetchedEvent.performers.first?.image
+            cell.eventImage.sd_setImage(with: eventImageURL)
             cell.eventImage.layer.cornerRadius = 10
             
             cell.titleLabel.text = fetchedEvent.title
-            cell.locationLabel.text = fetchedEvent.location
+            cell.locationLabel.text = fetchedEvent.venue.location
             
-            let formattedDate = viewModel.formatDate(date: fetchedEvent.dateTime)
+            let formattedDate = viewModel.formatDate(date: fetchedEvent.datetimeUTC ?? "")
             cell.DateLabel.text = formattedDate
             
             cell.favBtn.tintColor = viewModel.contains(fetchedEvent) ? .red : .clear
