@@ -6,6 +6,10 @@ Displays events from the SeatGeek API (https://platform.seatgeek.com/)
 ### This is a remake of the app linked below. 
 [SwiftUI App Link](https://github.com/Andylochan/Fetch/)
 
+## Differences
+- Using Codable instead of Alamofire
+- Using UIKit instead of SwiftUI
+
 ## How to use
 Please open and run the ```Fetch-UIKit.xcworkspace``` file to view the project. 
 
