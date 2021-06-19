@@ -45,13 +45,12 @@ class HomeViewModel: ObservableObject {
     func searchEvents() {
         let originalQuery = searchQuery.replacingOccurrences(of: " ", with: "+")
         
-        DataHandler.shared.fetchEvents(with: originalQuery) { [unowned self] (result, events) in
-            if let res = result {
-                self.fetchedEvents = events
-                print(res ? "Fetch Success" : "Fetch Error")
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "dataFetched"), object: nil)
-            }
+        DataHandler.shared.fetchEvents(with: originalQuery) { [unowned self] (events) in
+            
+            self.fetchedEvents = events?.events
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "dataFetched"), object: nil)
         }
+
     }
 }
 
