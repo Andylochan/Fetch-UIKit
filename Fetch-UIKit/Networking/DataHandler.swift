@@ -16,8 +16,15 @@ class DataHandler {
         guard let url = URL(string: jsonUrlString) else { return }
         
         URLSession.shared.dataTask(with: url) { (data, response, err) in
-            //check err
-            //check response
+            if let error = err {
+                print("Error: \(error)")
+                return
+            }
+            guard let httpResponse = response as? HTTPURLResponse,
+                (200...299).contains(httpResponse.statusCode) else {
+                print("Response: \(String(describing: response))")
+                return
+            }
 
             guard let data = data else { return }
             do {
