@@ -15,8 +15,8 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var favButton: UIButton!
     
-    var event = Event(id: 000, title: "", datetimeUTC: "", venue: Venue(location: ""), performers: [])
     let viewModel = HomeViewModel.shared
+    var event = Event(id: 000, title: "", datetimeUTC: "", venue: Venue(location: ""), performers: [])
     
     override func viewDidLoad() {
         super.viewDidLoad()

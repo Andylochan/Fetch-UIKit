@@ -7,11 +7,11 @@
 
 import UIKit
 
-struct Events: Codable {
+struct Events: Decodable {
     let events: [Event]
 }
 
-struct Event: Codable, Identifiable {
+struct Event: Decodable, Identifiable {
     let id: Int
     let title: String?
     let datetimeUTC: String?
@@ -26,7 +26,7 @@ struct Event: Codable, Identifiable {
     }
 }
 
-struct Venue: Codable {
+struct Venue: Decodable {
     let location: String?
     
     enum CodingKeys: String, CodingKey {
@@ -34,6 +34,6 @@ struct Venue: Codable {
     }
 }
 
-struct Performer: Codable {
+struct Performer: Decodable {
     let image: URL?
 }
