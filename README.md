@@ -7,7 +7,8 @@ Displays events from the SeatGeek API (https://platform.seatgeek.com/)
 [SwiftUI App Link](https://github.com/Andylochan/Fetch/)
 
 ## Differences
-- Using Codable instead of Alamofire
+- Remove dependency for SwiftyJSON/Alamofire
+- Using Decodable to parse JSON reponse 
 - Using UIKit instead of SwiftUI
 
 ## How to use
