@@ -7,8 +7,6 @@ target 'Fetch-UIKit' do
 
   # Pods for Fetch-UIKit
   pod 'SDWebImage'
-  pod 'Alamofire', '~> 4.7'
-  pod 'SwiftyJSON', '~> 4.0'
 
   target 'Fetch-UIKitTests' do
     inherit! :search_paths

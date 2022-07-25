@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  HomeViewController.swift
 //  Fetch-UIKit
 //
 //  Created by Andy Lochan on 6/17/21.
@@ -8,7 +8,7 @@
 import UIKit
 import SDWebImage
 
-class ViewController: UIViewController {
+class HomeViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -19,6 +19,10 @@ class ViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         searchBar.delegate = self
+        
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "dataFetched") , object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "dataUpdated") , object: nil)
+
         NotificationCenter.default.addObserver(self, selector: #selector(self.refresh), name: NSNotification.Name(rawValue: "dataFetched"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.refresh), name: NSNotification.Name(rawValue: "dataUpdated"), object: nil)
     }
@@ -29,7 +33,7 @@ class ViewController: UIViewController {
 }
 
 // MARK:- TableView Datasource
-extension ViewController: UITableViewDataSource {
+extension HomeViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.fetchedEvents?.count ?? 0
@@ -56,7 +60,7 @@ extension ViewController: UITableViewDataSource {
 }
 
 // MARK:- TableView Delegate
-extension ViewController: UITableViewDelegate {
+extension HomeViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -69,7 +73,7 @@ extension ViewController: UITableViewDelegate {
 }
 
 // MARK:- Searchbar Delegate
-extension ViewController: UISearchBarDelegate {
+extension HomeViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text?.count != 0 {
