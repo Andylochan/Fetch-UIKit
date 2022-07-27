@@ -48,7 +48,6 @@ class HomeViewController: UINavigationController {
         tableView.dataSource = self
         tableView.delegate = self
         
-        
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "dataFetched") , object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "dataUpdated") , object: nil)
 
@@ -100,7 +99,7 @@ extension HomeViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 150
+        return 130
     }
 }
 

@@ -12,24 +12,27 @@ class EventCell: UITableViewCell {
     
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.font = .systemFont(ofSize: 17, weight: .bold)
+        titleLabel.font = .systemFont(ofSize: 16, weight: .bold)
+        titleLabel.numberOfLines = 2
         return titleLabel
     }()
     
     lazy var eventImage: UIImageView = {
         let eventImage = UIImageView()
+        eventImage.translatesAutoresizingMaskIntoConstraints = false
+        eventImage.widthAnchor.constraint(equalToConstant: 130).isActive = true
         return eventImage
     }()
     
     lazy var locationLabel: UILabel = {
         let locationLabel = UILabel()
-        locationLabel.font = .systemFont(ofSize: 15, weight: .regular)
+        locationLabel.font = .systemFont(ofSize: 14, weight: .regular)
         return locationLabel
     }()
     
     lazy var dateLabel: UILabel = {
         let dateLabel = UILabel()
-        dateLabel.font = .systemFont(ofSize: 15, weight: .regular)
+        dateLabel.font = .systemFont(ofSize: 14, weight: .regular)
         return dateLabel
     }()
     
@@ -38,27 +41,40 @@ class EventCell: UITableViewCell {
         return favButton
     }()
     
+    lazy var contentStackView: UIStackView = {
+        let contentStackView = UIStackView()
+        contentStackView.axis = .horizontal
+        contentStackView.distribution = .fillProportionally
+        contentStackView.spacing = 10
+        return contentStackView
+    }()
+    
     lazy var labelStackView: UIStackView = {
         let labelStackView = UIStackView()
         labelStackView.axis = .vertical
         labelStackView.distribution = .fillEqually
-        return labelStackView
-    }()
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = .orange
+        labelStackView.spacing = -10
         
-        contentView.addSubview(labelStackView)
         labelStackView.addArrangedSubview(titleLabel)
         labelStackView.addArrangedSubview(locationLabel)
         labelStackView.addArrangedSubview(dateLabel)
+        
+        return labelStackView
+    }()
+    
+// MARK: - Methods
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+        contentView.addSubview(contentStackView)
+        
+        contentStackView.addArrangedSubview(eventImage)
+        contentStackView.addArrangedSubview(labelStackView)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        labelStackView.frame = CGRect(x: 50, y: 0, width: 250, height: contentView.frame.height)
+        contentStackView.frame = CGRect(x: 0, y: 0, width: contentView.frame.width, height: contentView.frame.height)
     }
     
     required init?(coder: NSCoder) {
