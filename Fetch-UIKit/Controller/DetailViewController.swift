@@ -8,12 +8,13 @@
 import UIKit
 import SDWebImage
 
+//TODO: CONVERT TO PROGRAMATIC UI
 class DetailViewController: UIViewController {
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var imgView: UIImageView!
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var locationLabel: UILabel!
-    @IBOutlet weak var favButton: UIButton!
+    var titleLabel = UILabel()
+    var imgView = UIImageView()
+    var dateLabel = UILabel()
+    var locationLabel = UILabel()
+    var favButton = UIButton()
     
     let viewModel = HomeViewModel.shared
     var event = Event(id: 000, title: "", datetimeUTC: "", venue: Venue(location: ""), performers: [])

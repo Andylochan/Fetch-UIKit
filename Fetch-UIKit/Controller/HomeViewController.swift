@@ -8,7 +8,7 @@
 import UIKit
 import SDWebImage
 
-class HomeViewController: UINavigationController {
+class HomeViewController: UIViewController {
     
     lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
@@ -88,10 +88,8 @@ extension HomeViewController: UITableViewDataSource {
 // MARK: -  TableView Delegate
 extension HomeViewController: UITableViewDelegate {
 
-    //TODO: REMOVE STORYBOARD
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let controller = storyboard.instantiateViewController(withIdentifier: "DetailVC") as! DetailViewController
+        let controller = DetailViewController()
         if let eventToPass = viewModel.fetchedEvents?[indexPath.row] {
             controller.event = eventToPass
         }
