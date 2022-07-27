@@ -78,9 +78,7 @@ extension HomeViewController: UITableViewDataSource {
             
             cell.titleLabel.text = fetchedEvent.title
             cell.locationLabel.text = fetchedEvent.venue.location
-            
-            let formattedDate = viewModel.formatDate(date: fetchedEvent.datetimeUTC ?? "")
-            cell.dateLabel.text = formattedDate
+            cell.dateLabel.text = viewModel.formatDate(date: fetchedEvent.datetimeUTC ?? "")
             
             cell.favButton.tintColor = viewModel.contains(fetchedEvent) ? .red : .clear
         }
