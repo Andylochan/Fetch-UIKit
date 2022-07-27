@@ -83,6 +83,7 @@ class DetailViewController: UIViewController {
         favButton.setBackgroundImage(viewModel.contains(event) ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart"), for: .normal)
     }
     
+    //TODO: Handle This Button Tap As @OBJC Func
     @IBAction func favBtnTapped(_ sender: UIButton) {
         if viewModel.contains(event) {
             viewModel.remove(event)
