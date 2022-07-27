@@ -23,33 +23,45 @@ class EventCell: UITableViewCell {
     
     lazy var locationLabel: UILabel = {
         let locationLabel = UILabel()
+        locationLabel.font = .systemFont(ofSize: 15, weight: .regular)
         return locationLabel
     }()
     
     lazy var dateLabel: UILabel = {
         let dateLabel = UILabel()
+        dateLabel.font = .systemFont(ofSize: 15, weight: .regular)
         return dateLabel
     }()
     
-    lazy var favBtn: UIButton = {
-        let favBtn = UIButton()
-        return favBtn
+    lazy var favButton: UIButton = {
+        let favButton = UIButton()
+        return favButton
+    }()
+    
+    lazy var labelStackView: UIStackView = {
+        let labelStackView = UIStackView()
+        labelStackView.axis = .vertical
+        labelStackView.distribution = .fillEqually
+        return labelStackView
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = .orange
         
-        contentView.addSubview(titleLabel)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        contentView.addSubview(labelStackView)
+        labelStackView.addArrangedSubview(titleLabel)
+        labelStackView.addArrangedSubview(locationLabel)
+        labelStackView.addArrangedSubview(dateLabel)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        titleLabel.frame = CGRect(x: 5, y: 5, width: 250, height: contentView.frame.height-10)
+        labelStackView.frame = CGRect(x: 50, y: 0, width: 250, height: contentView.frame.height)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

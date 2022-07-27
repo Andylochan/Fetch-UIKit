@@ -8,16 +8,16 @@
 import UIKit
 import SDWebImage
 
-class HomeViewController: UIViewController {
-    
-    lazy var tableView: UITableView = {
-        let tableView = UITableView()
-        return tableView
-    }()
+class HomeViewController: UINavigationController {
     
     lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         return searchBar
+    }()
+    
+    lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        return tableView
     }()
     
     let viewModel = HomeViewModel.shared
@@ -25,39 +25,39 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.addSubview(tableView)
-        self.view.addSubview(searchBar)
+        view.addSubview(searchBar)
+        view.addSubview(tableView)
         
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         searchBar.translatesAutoresizingMaskIntoConstraints = false
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            searchBar.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
         ])
         
         tableView.register(EventCell.self, forCellReuseIdentifier: EventCell.identifier)
         
+        searchBar.delegate = self
         tableView.dataSource = self
         tableView.delegate = self
-        searchBar.delegate = self
+        
         
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "dataFetched") , object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "dataUpdated") , object: nil)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(self.refresh), name: NSNotification.Name(rawValue: "dataFetched"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.refresh), name: NSNotification.Name(rawValue: "dataUpdated"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refresh), name: NSNotification.Name(rawValue: "dataFetched"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refresh), name: NSNotification.Name(rawValue: "dataUpdated"), object: nil)
     }
     
     @objc func refresh() {
-       self.tableView.reloadData()
+       tableView.reloadData()
    }
 }
 
@@ -82,7 +82,7 @@ extension HomeViewController: UITableViewDataSource {
             let formattedDate = viewModel.formatDate(date: fetchedEvent.datetimeUTC ?? "")
             cell.dateLabel.text = formattedDate
             
-            cell.favBtn.tintColor = viewModel.contains(fetchedEvent) ? .red : .clear
+            cell.favButton.tintColor = viewModel.contains(fetchedEvent) ? .red : .clear
         }
         return cell
     }
@@ -91,6 +91,7 @@ extension HomeViewController: UITableViewDataSource {
 // MARK: -  TableView Delegate
 extension HomeViewController: UITableViewDelegate {
 
+    //TODO: REMOVE STORYBOARD
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let controller = storyboard.instantiateViewController(withIdentifier: "DetailVC") as! DetailViewController
@@ -98,6 +99,10 @@ extension HomeViewController: UITableViewDelegate {
             controller.event = eventToPass
         }
         navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 150
     }
 }
 
