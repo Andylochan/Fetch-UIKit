@@ -69,6 +69,7 @@ class EventCell: UITableViewCell {
         contentView.addSubview(contentStackView)
         
         contentStackView.addArrangedSubview(eventImage)
+//        eventImage.addSubview(favButton) //TODO: give top/trailing constraint to image. + width / height
         contentStackView.addArrangedSubview(labelStackView)
     }
     
