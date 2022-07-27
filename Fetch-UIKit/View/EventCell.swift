@@ -8,17 +8,48 @@
 import UIKit
 
 class EventCell: UITableViewCell {
-    @IBOutlet weak var eventImage: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var locationLabel: UILabel!
-    @IBOutlet weak var DateLabel: UILabel!
-    @IBOutlet weak var favBtn: UIButton!
+    static let identifier = "EventCell"
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    lazy var titleLabel: UILabel = {
+        let titleLabel = UILabel()
+        titleLabel.font = .systemFont(ofSize: 17, weight: .bold)
+        return titleLabel
+    }()
+    
+    lazy var eventImage: UIImageView = {
+        let eventImage = UIImageView()
+        return eventImage
+    }()
+    
+    lazy var locationLabel: UILabel = {
+        let locationLabel = UILabel()
+        return locationLabel
+    }()
+    
+    lazy var dateLabel: UILabel = {
+        let dateLabel = UILabel()
+        return dateLabel
+    }()
+    
+    lazy var favBtn: UIButton = {
+        let favBtn = UIButton()
+        return favBtn
+    }()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        contentView.backgroundColor = .orange
+        
+        contentView.addSubview(titleLabel)
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        titleLabel.frame = CGRect(x: 5, y: 5, width: 250, height: contentView.frame.height-10)
     }
 }

@@ -37,7 +37,7 @@ class DataHandler {
     }
 }    
 
-// MARK:-  ClientID
+// MARK: -  ClientID
 extension DataHandler {
     private var clientID: String {
         get {

@@ -9,13 +9,42 @@ import UIKit
 import SDWebImage
 
 class HomeViewController: UIViewController {
-    @IBOutlet var tableView: UITableView!
-    @IBOutlet weak var searchBar: UISearchBar!
+    
+    lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        return tableView
+    }()
+    
+    lazy var searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        return searchBar
+    }()
     
     let viewModel = HomeViewModel.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.view.addSubview(tableView)
+        self.view.addSubview(searchBar)
+        
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            searchBar.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+        ])
+        
+        tableView.register(EventCell.self, forCellReuseIdentifier: EventCell.identifier)
+        
         tableView.dataSource = self
         tableView.delegate = self
         searchBar.delegate = self
@@ -32,7 +61,7 @@ class HomeViewController: UIViewController {
    }
 }
 
-// MARK:- TableView Datasource
+// MARK: - TableView Datasource
 extension HomeViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -40,7 +69,7 @@ extension HomeViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: EventCell.identifier, for: indexPath) as! EventCell
         
         if let fetchedEvent = viewModel.fetchedEvents?[indexPath.row] {
             let eventImageURL = fetchedEvent.performers.first?.image
@@ -51,7 +80,7 @@ extension HomeViewController: UITableViewDataSource {
             cell.locationLabel.text = fetchedEvent.venue.location
             
             let formattedDate = viewModel.formatDate(date: fetchedEvent.datetimeUTC ?? "")
-            cell.DateLabel.text = formattedDate
+            cell.dateLabel.text = formattedDate
             
             cell.favBtn.tintColor = viewModel.contains(fetchedEvent) ? .red : .clear
         }
@@ -59,7 +88,7 @@ extension HomeViewController: UITableViewDataSource {
     }
 }
 
-// MARK:- TableView Delegate
+// MARK: -  TableView Delegate
 extension HomeViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -72,7 +101,7 @@ extension HomeViewController: UITableViewDelegate {
     }
 }
 
-// MARK:- Searchbar Delegate
+// MARK: -  Searchbar Delegate
 extension HomeViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

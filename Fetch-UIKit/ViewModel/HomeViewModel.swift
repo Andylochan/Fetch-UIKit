@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class HomeViewModel: ObservableObject {
+final class HomeViewModel: ObservableObject {
     static let shared = HomeViewModel()
     let defaults = UserDefaults.standard
     var searchCancellable: AnyCancellable? = nil
@@ -54,7 +54,7 @@ class HomeViewModel: ObservableObject {
     }
 }
 
-// MARK:-  Favorites Methods
+// MARK: -  Favorites Methods
 extension HomeViewModel {
     func getEventIds() -> Set<Int> {
         return self.events
@@ -88,7 +88,7 @@ extension HomeViewModel {
     }
 }
 
-// MARK:- Date Formatter
+// MARK: - Date Formatter
 extension HomeViewModel {
     func formatDate(date: String) -> String {
         let dateFormatter = DateFormatter()
