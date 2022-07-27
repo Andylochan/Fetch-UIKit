@@ -10,17 +10,62 @@ import SDWebImage
 
 //TODO: CONVERT TO PROGRAMATIC UI
 class DetailViewController: UIViewController {
-    var titleLabel = UILabel()
-    var imgView = UIImageView()
-    var dateLabel = UILabel()
-    var locationLabel = UILabel()
-    var favButton = UIButton()
+    
+    lazy var titleLabel: UILabel = {
+        let titleLabel = UILabel()
+        return titleLabel
+    }()
+    
+    lazy var imgView: UIImageView = {
+        let imgView = UIImageView()
+        return imgView
+    }()
+    
+    lazy var dateLabel: UILabel = {
+        let dateLabel = UILabel()
+        return dateLabel
+    }()
+    
+    lazy var locationLabel: UILabel = {
+        let locationLabel = UILabel()
+        return locationLabel
+    }()
+    
+    lazy var favButton: UIButton = {
+        let favButton = UIButton()
+        return favButton
+    }()
+    
+    lazy var containerView: UIView = {
+        let containerView = UIView()
+        containerView.backgroundColor = .orange
+        return containerView
+    }()
+    
+    lazy var centerVStack: UIStackView = {
+        let centerVStack = UIStackView()
+        centerVStack.axis = .vertical
+        centerVStack.distribution = .fillProportionally
+        return centerVStack
+    }()
     
     let viewModel = HomeViewModel.shared
     var event = Event(id: 000, title: "", datetimeUTC: "", venue: Venue(location: ""), performers: [])
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.addSubview(containerView)
+        
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            containerView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            containerView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+        
         setupView()
     }
     
