@@ -19,8 +19,6 @@ class EventCell: UITableViewCell {
     
     lazy var eventImage: UIImageView = {
         let eventImage = UIImageView()
-        eventImage.translatesAutoresizingMaskIntoConstraints = false
-        eventImage.widthAnchor.constraint(equalToConstant: 130).isActive = true
         return eventImage
     }()
     
@@ -69,13 +67,25 @@ class EventCell: UITableViewCell {
         contentView.addSubview(contentStackView)
         
         contentStackView.addArrangedSubview(eventImage)
-//        eventImage.addSubview(favButton) //TODO: give top/trailing constraint to image. + width / height
+        eventImage.addSubview(favButton)
         contentStackView.addArrangedSubview(labelStackView)
+        
+        eventImage.translatesAutoresizingMaskIntoConstraints = false
+        favButton.translatesAutoresizingMaskIntoConstraints = false
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         contentStackView.frame = CGRect(x: 0, y: 0, width: contentView.frame.width, height: contentView.frame.height)
+        
+        NSLayoutConstraint.activate([
+            eventImage.widthAnchor.constraint(equalToConstant: 130),
+           
+            favButton.widthAnchor.constraint(equalToConstant: 25),
+            favButton.heightAnchor.constraint(equalToConstant: 25),
+            favButton.topAnchor.constraint(equalTo: eventImage.topAnchor),
+            favButton.rightAnchor.constraint(equalTo: eventImage.rightAnchor),
+        ])
     }
     
     required init?(coder: NSCoder) {
