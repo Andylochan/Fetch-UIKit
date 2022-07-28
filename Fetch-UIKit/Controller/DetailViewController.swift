@@ -8,11 +8,12 @@
 import UIKit
 import SDWebImage
 
-//TODO: CONVERT TO PROGRAMATIC UI
 class DetailViewController: UIViewController {
     
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
+        titleLabel.font = .systemFont(ofSize: 24, weight: .bold)
+        titleLabel.numberOfLines = 2
         return titleLabel
     }()
     
@@ -23,11 +24,13 @@ class DetailViewController: UIViewController {
     
     lazy var dateLabel: UILabel = {
         let dateLabel = UILabel()
+        dateLabel.font = .systemFont(ofSize: 16, weight: .semibold)
         return dateLabel
     }()
     
     lazy var locationLabel: UILabel = {
         let locationLabel = UILabel()
+        locationLabel.font = .systemFont(ofSize: 14, weight: .regular)
         return locationLabel
     }()
     
@@ -38,15 +41,19 @@ class DetailViewController: UIViewController {
     
     lazy var containerView: UIView = {
         let containerView = UIView()
-        containerView.backgroundColor = .orange
+        containerView.backgroundColor = .white
         return containerView
     }()
     
-    lazy var centerVStack: UIStackView = {
-        let centerVStack = UIStackView()
-        centerVStack.axis = .vertical
-        centerVStack.distribution = .fillProportionally
-        return centerVStack
+    lazy var labelVStack: UIStackView = {
+        let labelVStack = UIStackView()
+        labelVStack.axis = .vertical
+        labelVStack.distribution = .fillEqually
+        
+        labelVStack.addArrangedSubview(dateLabel)
+        labelVStack.addArrangedSubview(locationLabel)
+        
+        return labelVStack
     }()
     
     let viewModel = HomeViewModel.shared
@@ -56,14 +63,42 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         
         view.addSubview(containerView)
+        containerView.addSubview(titleLabel)
+        containerView.addSubview(imgView)
+        containerView.addSubview(labelVStack)
+        containerView.addSubview(favButton)
         
         containerView.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        imgView.translatesAutoresizingMaskIntoConstraints = false
+        labelVStack.translatesAutoresizingMaskIntoConstraints = false
+        favButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             containerView.leftAnchor.constraint(equalTo: view.leftAnchor),
             containerView.rightAnchor.constraint(equalTo: view.rightAnchor),
             containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 100),
+            titleLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 15),
+            titleLabel.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -15),
+            titleLabel.heightAnchor.constraint(equalToConstant: 60),
+            
+            imgView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
+            imgView.leftAnchor.constraint(equalTo: containerView.leftAnchor),
+            imgView.rightAnchor.constraint(equalTo: containerView.rightAnchor),
+            imgView.heightAnchor.constraint(equalToConstant: 300),
+            
+            labelVStack.topAnchor.constraint(equalTo: imgView.bottomAnchor, constant: 20),
+            labelVStack.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 15),
+            labelVStack.rightAnchor.constraint(equalTo: favButton.leftAnchor, constant: 15),
+            labelVStack.heightAnchor.constraint(equalToConstant: 75),
+            
+            favButton.centerYAnchor.constraint(equalTo: labelVStack.centerYAnchor),
+            favButton.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -15),
+            favButton.heightAnchor.constraint(equalToConstant: 45),
+            favButton.widthAnchor.constraint(equalToConstant: 55),
         ])
         
         setupView()
