@@ -7,6 +7,7 @@
 
 import UIKit
 
+//TODO: Reference https://www.hackingwithswift.com/articles/89/how-to-move-view-code-out-of-your-view-controllers
 class HomeView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
