@@ -36,6 +36,7 @@ class EventCell: UITableViewCell {
     
     lazy var favButton: UIButton = {
         let favButton = UIButton()
+        favButton.setImage(UIImage(systemName: "heart.circle"), for: .normal)
         return favButton
     }()
     

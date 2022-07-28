@@ -62,6 +62,8 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        favButton.addTarget(self, action: #selector(action(sender:)), for: .touchUpInside)
+        
         view.addSubview(containerView)
         containerView.addSubview(titleLabel)
         containerView.addSubview(imgView)
@@ -118,8 +120,7 @@ class DetailViewController: UIViewController {
         favButton.setBackgroundImage(viewModel.contains(event) ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart"), for: .normal)
     }
     
-    //TODO: Handle This Button Tap As @OBJC Func
-    @IBAction func favBtnTapped(_ sender: UIButton) {
+    @objc func action(sender: UIButton) {
         if viewModel.contains(event) {
             viewModel.remove(event)
         } else {
