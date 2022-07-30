@@ -45,8 +45,8 @@ final class HomeViewController: UIViewController {
         searchBar.delegate = self
         tableView.dataSource = self
         tableView.delegate = self
-        
-        /// Try Using Combine or Delegates
+
+        // TODO: Use Combine or Delegate Instead
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "dataFetched") , object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "dataUpdated") , object: nil)
 
