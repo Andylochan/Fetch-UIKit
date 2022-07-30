@@ -9,19 +9,20 @@ import UIKit
 import SDWebImage
 
 final class HomeViewController: UIViewController {
+    let viewModel = HomeViewModel.shared
     
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
         return searchBar
     }()
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.register(EventCell.self, forCellReuseIdentifier: EventCell.identifier)
         return tableView
     }()
-    
-    //TODO: Change this away from a singletons
-    let viewModel = HomeViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,10 +30,7 @@ final class HomeViewController: UIViewController {
         view.addSubview(searchBar)
         view.addSubview(tableView)
         
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Try Looking At "Pin Edges"
+        //TODO: Use an extension to make these shorter, look At "Pin Edges" Extension
         NSLayoutConstraint.activate([
             searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchBar.leftAnchor.constraint(equalTo: view.leftAnchor),
@@ -44,12 +42,9 @@ final class HomeViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         
-        tableView.register(EventCell.self, forCellReuseIdentifier: EventCell.identifier)
-        
         searchBar.delegate = self
         tableView.dataSource = self
         tableView.delegate = self
-        
         
         /// Try Using Combine or Delegates
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "dataFetched") , object: nil)

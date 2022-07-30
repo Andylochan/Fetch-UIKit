@@ -9,99 +9,85 @@ import UIKit
 import SDWebImage
 
 final class DetailViewController: UIViewController {
+    let viewModel = HomeViewModel.shared
+    var event = Event(id: 000, title: "", datetimeUTC: "", venue: Venue(location: ""), performers: [])
     
     private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = .systemFont(ofSize: 24, weight: .bold)
         titleLabel.numberOfLines = 2
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         return titleLabel
     }()
     
-    private lazy var imgView: UIImageView = {
+    private lazy var detailImageView: UIImageView = {
         let imgView = UIImageView()
+        imgView.translatesAutoresizingMaskIntoConstraints = false
         return imgView
     }()
     
     private lazy var dateLabel: UILabel = {
         let dateLabel = UILabel()
         dateLabel.font = .systemFont(ofSize: 16, weight: .semibold)
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
         return dateLabel
     }()
     
     private lazy var locationLabel: UILabel = {
         let locationLabel = UILabel()
         locationLabel.font = .systemFont(ofSize: 14, weight: .regular)
+        locationLabel.translatesAutoresizingMaskIntoConstraints = false
         return locationLabel
     }()
     
-    private lazy var favButton: UIButton = {
-        let favButton = UIButton()
-        favButton.addTarget(self, action: #selector(action(sender:)), for: .touchUpInside)
-        return favButton
+    private lazy var favoriteButton: UIButton = {
+        let favoriteButton = UIButton()
+        favoriteButton.addTarget(self, action: #selector(action(sender:)), for: .touchUpInside)
+        favoriteButton.translatesAutoresizingMaskIntoConstraints = false
+        favoriteButton.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        favoriteButton.widthAnchor.constraint(equalToConstant: 55).isActive = true
+        return favoriteButton
     }()
     
-    private lazy var containerView: UIView = {
-        let containerView = UIView()
-        containerView.backgroundColor = .white
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        return containerView
+    private lazy var HStack: UIStackView = {
+        let HStack = UIStackView(arrangedSubviews: [labelVStack, UIView(), favoriteButton])
+        HStack.alignment = .center
+        HStack.translatesAutoresizingMaskIntoConstraints = false
+        return HStack
     }()
     
     private lazy var labelVStack: UIStackView = {
-        let labelVStack = UIStackView()
+        let labelVStack = UIStackView(arrangedSubviews: [dateLabel, locationLabel])
         labelVStack.axis = .vertical
         labelVStack.distribution = .fillEqually
-        
-        labelVStack.addArrangedSubview(dateLabel)
-        labelVStack.addArrangedSubview(locationLabel)
-        
+        labelVStack.translatesAutoresizingMaskIntoConstraints = false
         return labelVStack
     }()
-    
-    let viewModel = HomeViewModel()
-    var event = Event(id: 000, title: "", datetimeUTC: "", venue: Venue(location: ""), performers: [])
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.addSubview(containerView)
-        containerView.addSubview(titleLabel)
-        containerView.addSubview(imgView)
-        containerView.addSubview(labelVStack)
-        containerView.addSubview(favButton)
+        view.backgroundColor = .white
+        view.addSubview(titleLabel)
+        view.addSubview(detailImageView)
+        view.addSubview(HStack)
         
-        // Try moving these into the declaration vars 74-79
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        imgView.translatesAutoresizingMaskIntoConstraints = false
-        labelVStack.translatesAutoresizingMaskIntoConstraints = false
-        favButton.translatesAutoresizingMaskIntoConstraints = false
-        
+        //TODO: Use an extension to make these shorter
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            containerView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            containerView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 100),
-            titleLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 15),
-            titleLabel.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -15),
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
+            titleLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15),
+            titleLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15),
             titleLabel.heightAnchor.constraint(equalToConstant: 60),
+
+            detailImageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
+            detailImageView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            detailImageView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            detailImageView.heightAnchor.constraint(equalToConstant: 300),
             
-            imgView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            imgView.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-            imgView.rightAnchor.constraint(equalTo: containerView.rightAnchor),
-            imgView.heightAnchor.constraint(equalToConstant: 300),
-            
-            labelVStack.topAnchor.constraint(equalTo: imgView.bottomAnchor, constant: 20),
-            labelVStack.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 15),
-            labelVStack.rightAnchor.constraint(equalTo: favButton.leftAnchor, constant: 15),
-            labelVStack.heightAnchor.constraint(equalToConstant: 75),
-            
-            favButton.centerYAnchor.constraint(equalTo: labelVStack.centerYAnchor),
-            favButton.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -15),
-            favButton.heightAnchor.constraint(equalToConstant: 45),
-            favButton.widthAnchor.constraint(equalToConstant: 55),
+            HStack.topAnchor.constraint(equalTo: detailImageView.bottomAnchor, constant: 20),
+            HStack.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15),
+            HStack.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15),
+            HStack.heightAnchor.constraint(equalToConstant: 75),
         ])
         
         setupView()
@@ -110,15 +96,15 @@ final class DetailViewController: UIViewController {
     private func setupView() {
         titleLabel.text = event.title
         let eventImageURL = event.performers.first?.image
-        imgView.sd_setImage(with: eventImageURL)
-        imgView.layer.cornerRadius = 10
+        detailImageView.sd_setImage(with: eventImageURL)
+        detailImageView.layer.cornerRadius = 10
         
         let formattedDate = viewModel.formatDate(date: event.datetimeUTC ?? "")
         dateLabel.text = formattedDate
 
         locationLabel.text = event.venue.location
-        favButton.tintColor = viewModel.contains(event) ? .red : .black
-        favButton.setBackgroundImage(viewModel.contains(event) ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart"), for: .normal)
+        favoriteButton.tintColor = viewModel.contains(event) ? .red : .black
+        favoriteButton.setBackgroundImage(viewModel.contains(event) ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart"), for: .normal)
     }
     
     @objc func action(sender: UIButton) {

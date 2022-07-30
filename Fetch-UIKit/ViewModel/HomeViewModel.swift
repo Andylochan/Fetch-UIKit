@@ -9,6 +9,8 @@ import Foundation
 import Combine
 
 final class HomeViewModel: ObservableObject {
+    static let shared = HomeViewModel()
+    
     let defaults = UserDefaults.standard
     var searchCancellable: AnyCancellable? = nil
     
@@ -26,16 +28,13 @@ final class HomeViewModel: ObservableObject {
             self.events = []
         }
         
-        //Wait 0.6 sec after user is done typing, then fetch
         searchCancellable = $searchQuery
             .removeDuplicates()
             .debounce(for: 0.6, scheduler: RunLoop.main)
             .sink(receiveValue: { str in
                 if str == "" {
-                    //Reset Data
                     self.fetchedEvents = nil
-                }
-                else {
+                } else {
                     self.searchEvents()
                 }
             })
