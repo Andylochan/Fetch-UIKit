@@ -8,19 +8,20 @@
 import UIKit
 import SDWebImage
 
-class HomeViewController: UIViewController {
+final class HomeViewController: UIViewController {
     
-    lazy var searchBar: UISearchBar = {
+    private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         return searchBar
     }()
     
-    lazy var tableView: UITableView = {
+    private lazy var tableView: UITableView = {
         let tableView = UITableView()
         return tableView
     }()
     
-    let viewModel = HomeViewModel.shared
+    //TODO: Change this away from a singletons
+    let viewModel = HomeViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +32,7 @@ class HomeViewController: UIViewController {
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
+        // Try Looking At "Pin Edges"
         NSLayoutConstraint.activate([
             searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchBar.leftAnchor.constraint(equalTo: view.leftAnchor),
@@ -48,6 +50,8 @@ class HomeViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
+        
+        /// Try Using Combine or Delegates
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "dataFetched") , object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "dataUpdated") , object: nil)
 

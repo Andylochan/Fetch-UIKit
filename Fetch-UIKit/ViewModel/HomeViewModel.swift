@@ -9,7 +9,6 @@ import Foundation
 import Combine
 
 final class HomeViewModel: ObservableObject {
-    static let shared = HomeViewModel()
     let defaults = UserDefaults.standard
     var searchCancellable: AnyCancellable? = nil
     

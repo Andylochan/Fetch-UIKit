@@ -8,44 +8,46 @@
 import UIKit
 import SDWebImage
 
-class DetailViewController: UIViewController {
+final class DetailViewController: UIViewController {
     
-    lazy var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = .systemFont(ofSize: 24, weight: .bold)
         titleLabel.numberOfLines = 2
         return titleLabel
     }()
     
-    lazy var imgView: UIImageView = {
+    private lazy var imgView: UIImageView = {
         let imgView = UIImageView()
         return imgView
     }()
     
-    lazy var dateLabel: UILabel = {
+    private lazy var dateLabel: UILabel = {
         let dateLabel = UILabel()
         dateLabel.font = .systemFont(ofSize: 16, weight: .semibold)
         return dateLabel
     }()
     
-    lazy var locationLabel: UILabel = {
+    private lazy var locationLabel: UILabel = {
         let locationLabel = UILabel()
         locationLabel.font = .systemFont(ofSize: 14, weight: .regular)
         return locationLabel
     }()
     
-    lazy var favButton: UIButton = {
+    private lazy var favButton: UIButton = {
         let favButton = UIButton()
+        favButton.addTarget(self, action: #selector(action(sender:)), for: .touchUpInside)
         return favButton
     }()
     
-    lazy var containerView: UIView = {
+    private lazy var containerView: UIView = {
         let containerView = UIView()
         containerView.backgroundColor = .white
+        containerView.translatesAutoresizingMaskIntoConstraints = false
         return containerView
     }()
     
-    lazy var labelVStack: UIStackView = {
+    private lazy var labelVStack: UIStackView = {
         let labelVStack = UIStackView()
         labelVStack.axis = .vertical
         labelVStack.distribution = .fillEqually
@@ -56,13 +58,11 @@ class DetailViewController: UIViewController {
         return labelVStack
     }()
     
-    let viewModel = HomeViewModel.shared
+    let viewModel = HomeViewModel()
     var event = Event(id: 000, title: "", datetimeUTC: "", venue: Venue(location: ""), performers: [])
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        favButton.addTarget(self, action: #selector(action(sender:)), for: .touchUpInside)
         
         view.addSubview(containerView)
         containerView.addSubview(titleLabel)
@@ -70,6 +70,7 @@ class DetailViewController: UIViewController {
         containerView.addSubview(labelVStack)
         containerView.addSubview(favButton)
         
+        // Try moving these into the declaration vars 74-79
         containerView.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         imgView.translatesAutoresizingMaskIntoConstraints = false
